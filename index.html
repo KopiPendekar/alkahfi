@@ -1,0 +1,977 @@
+
+<html>
+
+<head>
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<link rel="stylesheet" href="bootstrap.css">
+<link rel="stylesheet" href="bootstrap-theme.css">
+<link rel="stylesheet" href="index.css">
+    
+    
+</head>
+<style>
+
+</style>
+<style type="text/css">
+    /* Overwrite the default to keep the scrollbar always visible */
+    ::-webkit-scrollbar {
+      -webkit-appearance: none;
+      width: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, .4);
+      border-radius: 3px;
+    }
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      
+      max-height: 100%;
+     
+      border-radius: 10px;
+      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 5px 0 rgba(0, 0, 0, 0.23);
+      box-sizing: border-box;
+      -webkit-flex-basis: 100%;
+      -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      overflow: auto;
+      padding: 10px;
+      position: relative;
+      text-align: center;
+      -webkit-transition: height 0.1s ease-in-out;
+      -o-transition: height 0.1s ease-in-out;
+      transition: height 0.1s ease-in-out;
+      }
+
+<style>
+label { 
+      border: 3px solid red; /* THIS SHOULD CHANGE */
+}
+
+input:focus ~ label {
+       border-color: yellow; /* WHEN "input:blur" <label> border-color should be yellow */
+}
+
+input {
+  width: 100%;
+  border:0;
+  outline:0;
+  background: transparent;
+  font-size: 16px;
+  text-align: center;
+  
+  }
+.customers {
+  counter-reset: serial-number;  /* Set the serial number counter to 0 */
+  
+}
+
+.customers td:first-child:before {
+  counter-increment: serial-number;  /* Increment the serial number counter */
+  content: counter(serial-number);  /* Display the counter */
+  text-align: center;
+}
+	
+	
+	tbody input[type="number"] {
+  text-align: center;
+}
+	
+#customers {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  text-align: center;
+  
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 2px;
+  text-align: center;
+  
+  
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  text-align: center;
+  background-color: #04AA6D;
+  color: white;
+  text-align: center;
+}
+</style>
+<style>
+*:fullscreen, *:-webkit-full-screen, *:-moz-full-screen {
+    background-color: rgba(255,255,255,0)!important;
+    padding: 20px;
+}
+
+::backdrop
+{
+    background-color: white;
+    
+}
+/* Center the loader */
+#loader {
+  position: absolute;
+  left: 60%;
+  top: 50%;
+  z-index: 1;
+  width: 80px;
+  height: 80px;
+  margin: -76px 0 0 -76px;
+  border: 10px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 10px solid red;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
+</style>
+
+<style>
+
+        #status {
+            border: 2px solid;
+            padding: 15px 20px 15px 40px;
+            width: 160px;
+            margin: 0 auto;
+            border-radius: 20px;
+            font-size: 30px;
+            font-weight: bold;
+            text-transform: uppercase;
+            position: relative;
+        }
+        #status.online {
+            color: green;
+        }        
+        #status.offline {
+            color: red;
+        }
+        #status.online::before, #status.offline::before {
+            width: 25px;
+            height: 25px;
+            content: "";
+            border-radius: 15px;
+            box-shadow: 0 0 8px;
+            position: absolute;
+            left: 20px;
+            top: 25px;
+        }
+        #status.online::before {
+            background: green;
+        }
+        #status.offline::before {
+            background: red;
+        }
+    </style>
+
+<body onload="myFunction()" style="margin:0;" class="offline">
+<div id="loader"></div>
+<div style="display:none;" id="myDiv" class="animate-bottom">
+	
+
+ <ul class="nav nav-tabs" id="myTab">
+  <li><a data-toggle="tab" href="#sectionA">DT</a></li>
+  <li><a data-toggle="tab" href="#sectionB">AB</a></li>
+  <li><a data-toggle="tab" href="#sectionC">DATA</a></li>
+  
+ 
+  
+  
+
+  <li class="dropdown">
+   <a data-toggle="dropdown" class="dropdown-toggle" href="#">Menu <b class="caret"></b></a>
+   <ul class="dropdown-menu">
+    <li><a data-toggle="tab" src="#consentform.html">About</a></li>
+    <li><a data-toggle="tab" href="#dropdown2">Close</a></li>
+   </ul>
+  </li>
+ </ul>
+ 
+ 
+ <div class="tab-content">
+  <div id="sectionA" class="tab-pane fade in active">
+   <h3>Plan BBM DumpTruck</h3>
+   <p id="current_date"></p>
+
+<div id="content">
+   <table class="customers"  id="customers">
+<th>&nbsp;NO&nbsp;</th>
+  <th>&nbsp;&nbsp;&nbsp;UNIT&nbsp;&nbsp;&nbsp;</th>
+  <th>NOR</th>
+  <th>KM</th>
+  <th>&nbsp;&nbsp;&nbsp;QTY&nbsp;&nbsp;&nbsp;</th>     
+<tr>
+<td></td>
+<td ><input type="text" value=DT16 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="DT16n" value=3.45 onchange=DT16()></td>
+<td><input type="Number" value="" id="DT16k" onchange=DT16()></td>
+<td><span id="DT16h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=DT23 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="DT23n" value=3.33 onchange=DT23()></td>
+<td><input type="Number" value="" id="DT23k" onchange=DT23()></td>
+<td><span  id="DT23h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=DT24 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="DT24n" value=2.94 onchange=DT24()></td>
+<td><input type="Number" value="" id="DT24k" onchange=DT24()></td>
+<td><span id="DT24h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=DT25 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="DT25n" value=3.23 onchange=DT25()></td>
+<td><input type="Number" value="" id="DT25k" onchange=DT25()></td>
+<td><span id="DT25h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=DT26 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="DT26n" value=3.57 onchange=DT26()></td>
+<td><input type="Number" value="" id="DT26k" onchange=DT26()></td>
+<td><span id="DT26h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=DT28 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="DT28n" value=3.13 onchange=DT28()></td>
+<td><input type="Number" value="" id="DT28k" onchange=DT28()></td>
+<td><span id="DT28h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=DT31 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="DT31n" value=3.23 onchange=DT31()></td>
+<td><input type="Number" value="" id="DT31k" onchange=DT31()></td>
+<td><span id="DT31h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=DT37 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="DT37n" value=3.23 onchange=DT37()></td>
+<td><input type="Number" value="" id="DT37k" onchange=DT37()></td>
+<td><span id="DT37h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=DT38 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="DT38n" value=3.13 onchange=DT38()></td>
+<td><input type="Number" value="" id="DT38k" onchange=DT38()></td>
+<td><span id="DT38h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=DT39 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="DT39n" value=3.03 onchange=DT39()></td>
+<td><input type="Number" value="" id="DT39k" onchange=DT39()></td>
+<td><span id="DT39h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=DT52 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="DT52n" value=3.50 onchange=DT52()></td>
+<td><input type="Number" value="" id="DT52k" onchange=DT52()></td>
+<td><span id="DT52h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=DT53 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="DT53n" value=3.50 onchange=DT53()></td>
+<td><input type="Number" value="" id="DT53k" onchange=DT53()></td>
+<td><span id="DT53h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=DT54 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="DT54n" value=3.57 onchange=DT54()></td>
+<td><input type="Number" value="" id="DT54k" onchange=DT54()></td>
+<td><span id="DT54h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=TRD01 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="TRD01n" value=1.20 onchange=TRD01()></td>
+<td><input type="Number" value="" id="TRD01k" onchange=TRD01()></td>
+<td><span id="TRD01h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=TRD02 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="TRD02n" value=1.20 onchange=TRD02()></td>
+<td><input type="Number" value="" id="TRD02k" onchange=TRD02()></td>
+<td><span id="TRD02h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=TCPO oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="TCPOn" value=1.20 onchange=TCPO()></td>
+<td><input type="Number" value="" id="TCPOk" onchange=TCPO()></td>
+<td><span id="TCPOh"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=DT29 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="DT29n" value="" onchange=DT29()></td>
+<td><input type="Number" value="" id="DT29k" onchange=DT29()></td>
+<td><span id="DT29h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=TDNO oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="TDNOn" value="" onchange=TDNO()></td>
+<td><input type="Number" value="" id="TDNOk" onchange=TDNO()></td>
+<td><span id="TDNOh"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value="" oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="DTXXn" value="" onchange=DTXX()></td>
+<td><input type="Number" value="" id="DTXXk" onchange=DTXX()></td>
+<td><span id="DTXXh"></span></td>
+</tr>
+ <br>
+</table>
+     </div>     
+       </div>
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+    <div id="sectionB" class="tab-pane fade">
+   <h3>Plan BBM Alat Berat</h3>
+      <p id="burrent_date"></p>
+
+<div id="content">
+   <table class="customers"  id="customers">
+<th>&nbsp;NO&nbsp;</th>
+  <th>&nbsp;&nbsp;&nbsp;UNIT&nbsp;&nbsp;&nbsp;</th>
+  <th>NOR</th>
+  <th>KM</th>
+  <th>&nbsp;&nbsp;&nbsp;QTY&nbsp;&nbsp;&nbsp;</th>     
+<tr>
+<td></td>
+<td ><input type="text" value=BECHO oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="BECHOn" value=8.10 onchange=BECHO()></td>
+<td><input type="Number" value="" id="BECHOk" onchange=BECHO()></td>
+<td><span id="BECHOh"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=BW211D oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="BW211Dn" value=11.00 onchange=BW211D()></td>
+<td><input type="Number" value="" id="BW211Dk" onchange=BW211D()></td>
+<td><span  id="BW211Dh"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=BW219D oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="BW219Dn" value=14.00 onchange=BW219D()></td>
+<td><input type="Number" value="" id="BW219Dk" onchange=BW219D()></td>
+<td><span id="BW219Dh"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=GD16 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="GD16n" value=11.30 onchange=GD16()></td>
+<td><input type="Number" value="" id="GD16k" onchange=GD16()></td>
+<td><span id="GD16h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=GD535 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="GD535n" value=12.00 onchange=GD535()></td>
+<td><input type="Number" value="" id="GD535k" onchange=GD535()></td>
+<td><span id="GD535h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=PC130 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="PC130n" value=9.90 onchange=PC130()></td>
+<td><input type="Number" value="" id="PC130k" onchange=PC130()></td>
+<td><span id="PC130h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=PC200-10 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="PC20010n" value=13.50 onchange=PC20010()></td>
+<td><input type="Number" value="" id="PC20010k" onchange=PC20010()></td>
+<td><span id="PC20010h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=PC200-8 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="PC2008n" value=16.10 onchange=PC2008()></td>
+<td><input type="Number" value="" id="PC2008k" onchange=PC2008()></td>
+<td><span id="PC2008h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value=PC45 oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="PC45n" value=6.00 onchange=PC45()></td>
+<td><input type="Number" value="" id="PC45k" onchange=PC45()></td>
+<td><span id="PC45h"></span></td>
+</tr>
+
+<tr>
+<td></td>
+<td ><input type="text" value="" oninput="this.value = this.value.toUpperCase()" /></td>
+<td><input type="number" id="ABXn" value="" onchange=ABX()></td>
+<td><input type="Number" value="" id="ABXk" onchange=ABX()></td>
+<td><span id="ABXh"></span></td>
+</tr>
+<br>
+</tr>
+ <br>
+</table>
+     </div>     
+       </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	   
+    <div id="sectionC" class="tab-pane fade">
+   <h3>Karyawan</h3>
+      <div id="content">
+   <table class="table"  id="customers">
+<thead>
+<tr>
+  <th>&nbsp;No&nbsp;</th>
+  <th>&nbsp;Employee&nbsp;</th>
+  <th><input type="text" id="NAMAK" onkeyup="NAMAK()" value="Nama Karyawan"></th>
+  
+   
+  
+   </tr>
+  </thead>
+  <tbody id="myTable" >
+  
+     
+<tr><td>1</td><td>1945391</td></td><td>Cahya Mustofa</td></tr>
+<tr><td>2</td><td>0107042</td></td><td>Joko Prihanto</td></tr>
+<tr><td>3</td><td>0101010</td></td><td>Kp</td></tr>
+<tr><td>4</td><td>1171411</td></td><td>Sabihuri </td></tr>
+<tr><td>5</td><td>1060291</td></td><td>Sugiyanto</td></tr>
+<tr><td>6</td><td>1223531</td></td><td>Agus Wiguna</td></tr>
+<tr><td>7</td><td>0704611</td></td><td>Agus Wiyono</td></tr>
+<tr><td>8</td><td>0514771</td></td><td>Ais Siratol Jumilat</td></tr>
+<tr><td>9</td><td>1266741</td></td><td>Heri Fonda</td></tr>
+<tr><td>10</td><td>0407031</td></td><td>Slamet Suwanto</td></tr>
+<tr><td>11</td><td>0907721</td></td><td>Umar Ma'Ruf</td></tr>
+<tr><td>12</td><td>1497921</td></td><td>Febri Randy</td></tr>
+<tr><td>13</td><td>1856711</td></td><td>Joko Murtopo</td></tr>
+<tr><td>14</td><td>7050921</td></td><td>Prapto Purnomo</td></tr>
+<tr><td>15</td><td>1060401</td></td><td>Teguh Susilo</td></tr>
+<tr><td>16</td><td>1055311</td></td><td>Imam Zainuri</td></tr>
+<tr><td>17</td><td>0405331</td></td><td>Julian</td></tr>
+<tr><td>18</td><td>1310981</td></td><td>Mistono</td></tr>
+<tr><td>19</td><td>1162181</td></td><td>Nanang Suprayogi</td></tr>
+<tr><td>20</td><td>1405491</td></td><td>Ratna Agil</td></tr>
+<tr><td>21</td><td>1359171</td></td><td>Rudi Supriyono</td></tr>
+<tr><td>22</td><td>1421681</td></td><td>Suharno</td></tr>
+<tr><td>23</td><td>1060341</td></td><td>Tri Wahyudi</td></tr>
+<tr><td>24</td><td>1359181</td></td><td>Tusianto</td></tr>
+<tr><td>25</td><td>1827061</td></td><td>Ardiansah</td></tr>
+<tr><td>26</td><td>2206861</td></td><td>Arief Sulistyawan</td></tr>
+<tr><td>27</td><td>1223651</td></td><td>Arizal</td></tr>
+<tr><td>28</td><td>1827021</td></td><td>Armansyah Pranata</td></tr>
+<tr><td>29</td><td>2141571</td></td><td>M.Abi</td></tr>
+<tr><td>30</td><td>2206851</td></td><td>Rahmad Arif Apriyanto</td></tr>
+<tr><td>31</td><td>1345001</td></td><td>Sumarno </td></tr>
+<tr><td>32</td><td>1827051</td></td><td>Tri Wahyu Pamungkas</td></tr>
+<tr><td>33</td><td>9803571</td></td><td>Dedy Kurniawan</td></tr>
+<tr><td>34</td><td>1223241</td></td><td>Udin</td></tr>
+<tr><td>35</td><td>1135141</td></td><td>Parman</td></tr>
+<tr><td>36</td><td>1060651</td></td><td>Toto Diyantoro</td></tr>
+<br>
+</table>     
+  </div>
+  </div>
+  
+
+
+
+
+
+
+
+
+<div id="sectionD" class="tab-pane fade">
+<div id="content" >    
+
+   
+  </div>
+  </div>
+  
+
+
+
+
+
+
+<div id="sectionE" class="tab-pane fade">
+<div id="content">
+    
+</div>
+
+
+<div id="sectionF" class="tab-pane fade">
+<div id="content">
+    
+</div>
+
+
+<div id="sectionG" class="tab-pane fade">
+<div id="content">
+    
+</div>
+
+
+<div id="sectionH" class="tab-pane fade">
+<div id="content">
+    
+</div>
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <div id="dropdown1" class="tab-pane fade">
+   <h3>   </h3>
+   
+    </div>
+	
+	
+	
+	
+  <div id="dropdown2" class="tab-pane fade">
+   <h3>WEB</h3>
+   
+  </div>
+ </div>
+ 
+ 
+ 
+  
+	   
+
+ <script src="jquery.js"></script>
+ <script src="bootstrap.js"></script>
+
+ <script type="text/javascript">
+  $(document).ready(function()
+  {
+   $("#myTab li:eq(1) a").tab('show');
+  });
+ </script>
+
+
+
+<script >
+function DT16() {
+	var a = document.getElementById("DT16n").value;
+	var b = document.getElementById("DT16k").value;
+	if(a && b)
+	document.getElementById("DT16h").innerHTML= Math.round(b/a);}
+</script>
+
+<script >
+function DT23() {
+	var a = document.getElementById("DT23n").value;
+	var b = document.getElementById("DT23k").value;
+	if(a && b)
+	document.getElementById("DT23h").innerHTML= Math.round(b/a);}
+</script>
+
+<script >
+function DT24() {
+	var a = document.getElementById("DT24n").value;
+	var b = document.getElementById("DT24k").value;
+	if(a && b)
+	document.getElementById("DT24h").innerHTML= Math.round(b/a);}
+</script>
+
+<script >
+function DT25() {
+	var a = document.getElementById("DT25n").value;
+	var b = document.getElementById("DT25k").value;
+	if(a && b)
+	document.getElementById("DT25h").innerHTML= Math.round(b/a);}
+</script>
+
+<script >
+function DT26() {
+	var a = document.getElementById("DT26n").value;
+	var b = document.getElementById("DT26k").value;
+	if(a && b)
+	document.getElementById("DT26h").innerHTML= Math.round(b/a);}
+</script>
+
+
+<script >
+function DT28() {
+	var a = document.getElementById("DT28n").value;
+	var b = document.getElementById("DT28k").value;
+	if(a && b)
+	document.getElementById("DT28h").innerHTML= Math.round(b/a);}
+</script>
+
+<script >
+function DT31() {
+	var a = document.getElementById("DT31n").value;
+	var b = document.getElementById("DT31k").value;
+	if(a && b)
+	document.getElementById("DT31h").innerHTML= Math.round(b/a);}
+</script>
+
+<script >
+function DT37() {
+	var a = document.getElementById("DT37n").value;
+	var b = document.getElementById("DT37k").value;
+	if(a && b)
+	document.getElementById("DT37h").innerHTML= Math.round(b/a);}
+</script>
+
+<script >
+function DT38() {
+	var a = document.getElementById("DT38n").value;
+	var b = document.getElementById("DT38k").value;
+	if(a && b)
+	document.getElementById("DT38h").innerHTML= Math.round(b/a);}
+</script>
+
+<script >
+function DT39() {
+	var a = document.getElementById("DT39n").value;
+	var b = document.getElementById("DT39k").value;
+	if(a && b)
+	document.getElementById("DT39h").innerHTML= Math.round(b/a);}
+</script>
+
+<script >
+function DT52() {
+	var a = document.getElementById("DT52n").value;
+	var b = document.getElementById("DT52k").value;
+	if(a && b)
+	document.getElementById("DT52h").innerHTML= Math.round(b/a);}
+</script>
+
+<script >
+function DT53() {
+	var a = document.getElementById("DT53n").value;
+	var b = document.getElementById("DT53k").value;
+	if(a && b)
+	document.getElementById("DT53h").innerHTML= Math.round(b/a);}
+</script>
+
+
+<script >
+function DT54() {
+	var a = document.getElementById("DT54n").value;
+	var b = document.getElementById("DT54k").value;
+	if(a && b)
+	document.getElementById("DT54h").innerHTML= Math.round(b/a);}
+</script>
+
+<script >
+function TRD01() {
+	var a = document.getElementById("TRD01n").value;
+	var b = document.getElementById("TRD01k").value;
+	if(a && b)
+	document.getElementById("TRD01h").innerHTML= Math.round(b/a);}
+</script>
+
+<script >
+function TRD02() {
+	var a = document.getElementById("TRD02n").value;
+	var b = document.getElementById("TRD02k").value;
+	if(a && b)
+	document.getElementById("TRD02h").innerHTML= Math.round(b/a);}
+</script>
+
+<script >
+function TCPO() {
+	var a = document.getElementById("TCPOn").value;
+	var b = document.getElementById("TCPOk").value;
+	if(a && b)
+	document.getElementById("TCPOh").innerHTML= Math.round(b/a);}
+</script>
+
+<script >
+function TDNO() {
+	var a = document.getElementById("TDNOn").value;
+	var b = document.getElementById("TDNOk").value;
+	if(a && b)
+	document.getElementById("TDNOh").innerHTML= Math.round(b/a);}
+</script>
+
+<script >
+function DT29() {
+	var a = document.getElementById("DT29n").value;
+	var b = document.getElementById("DT29k").value;
+	if(a && b)
+	document.getElementById("DT29h").innerHTML= Math.round(b/a);}
+</script>
+
+<script >
+function DTXX() {
+	var a = document.getElementById("DTXXn").value;
+	var b = document.getElementById("DTXXk").value;
+	if(a && b)
+	document.getElementById("DTXXh").innerHTML= Math.round(b/a);}
+</script>
+
+<script>
+date = new Date();
+year = date.getFullYear();
+month = date.getMonth() + 1;
+day = date.getDate();
+document.getElementById("current_date").innerHTML = month + "/" + (day+1) + "/" + year;
+</script>
+
+<script>
+date = new Date();
+year = date.getFullYear();
+month = date.getMonth() + 1;
+day = date.getDate();
+document.getElementById("burrent_date").innerHTML = month + "/" + (day+1) + "/" + year;
+</script>
+
+	<script >
+function BECHO() {
+	var a = document.getElementById("BECHOn").value;
+	var b = document.getElementById("BECHOk").value;
+	if(a && b)
+	document.getElementById("BECHOh").innerHTML= Math.round(b*a);}
+</script>
+
+<script >
+function BW211D() {
+	var a = document.getElementById("BW211Dn").value;
+	var b = document.getElementById("BW211Dk").value;
+	if(a && b)
+	document.getElementById("BW211Dh").innerHTML= Math.round(b*a);}
+</script>
+
+<script >
+function BW219D() {
+	var a = document.getElementById("BW219Dn").value;
+	var b = document.getElementById("BW219Dk").value;
+	if(a && b)
+	document.getElementById("BW219Dh").innerHTML= Math.round(b*a);}
+</script>
+
+<script >
+function GD16() {
+	var a = document.getElementById("GD16n").value;
+	var b = document.getElementById("GD16k").value;
+	if(a && b)
+	document.getElementById("GD16h").innerHTML= Math.round(b*a);}
+</script>
+
+<script >
+function GD535() {
+	var a = document.getElementById("GD535n").value;
+	var b = document.getElementById("GD535k").value;
+	if(a && b)
+	document.getElementById("GD535h").innerHTML= Math.round(b*a);}
+</script>
+
+
+<script >
+function PC130() {
+	var a = document.getElementById("PC130n").value;
+	var b = document.getElementById("PC130k").value;
+	if(a && b)
+	document.getElementById("PC130h").innerHTML= Math.round(b*a);}
+</script>
+
+<script >
+function PC20010() {
+	var a = document.getElementById("PC20010n").value;
+	var b = document.getElementById("PC20010k").value;
+	if(a && b)
+	document.getElementById("PC20010h").innerHTML= Math.round(b*a);}
+</script>
+
+<script >
+function PC2008() {
+	var a = document.getElementById("PC2008n").value;
+	var b = document.getElementById("PC2008k").value;
+	if(a && b)
+	document.getElementById("PC2008h").innerHTML= Math.round(b*a);}
+</script>
+
+<script >
+function PC45() {
+	var a = document.getElementById("PC45n").value;
+	var b = document.getElementById("PC45k").value;
+	if(a && b)
+	document.getElementById("PC45h").innerHTML= Math.round(b*a);}
+</script>
+
+<script >
+function ABX() {
+	var a = document.getElementById("ABXn").value;
+	var b = document.getElementById("ABXk").value;
+	if(a && b)
+	document.getElementById("ABXh").innerHTML= Math.round(b*a);}
+</script>
+'
+<script>
+var myVar;
+
+function myFunction() {
+  myVar = setTimeout(showPage, 3000);
+}
+
+function showPage() {
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("myDiv").style.display = "block";
+}
+</script>
+
+<script>
+
+$(document).ready(function(){
+  $("#NAMAK").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>	
+
+<script>
+var elem = document.getElementById("appin");
+function openFullscreen() {
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { /* Safari */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE11 */
+    elem.msRequestFullscreen();
+  }
+}
+</script>
+
+</body>
+
+</html>
